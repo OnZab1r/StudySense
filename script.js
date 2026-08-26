@@ -66,22 +66,12 @@ const volumeControl = document.getElementById("volumeControl");
 //
 // This avoids the Pixabay 403 problem.
 //
-
 const tracks = [
     {
-        name: "Lofi Study — Focus",
-        url: "/music/lofi-focus.mp3"
-    },
-    {
-        name: "Lofi Study — Night",
-        url: "/music/lofi-night.mp3"
-    },
-    {
-        name: "Lofi Study — Rain",
-        url: "/music/lofi-rain.mp3"
+        name: "Lofi Midnight Club",
+        url: "/music/alex-morgan-lofi-midnight-club-568164.mp3"
     }
 ];
-
 let currentTrack = 0;
 
 studyAudio.volume = Number(volumeControl.value);

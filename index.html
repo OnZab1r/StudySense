@@ -1,1334 +1,783 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="StudySense - AI-powered personalized learning and quizzes">
+    <title>StudySense — Learn Smarter</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>StudySense</title>
-
-
-    <!-- Google Font -->
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
-
-        /* ==========================================
-           GLOBAL
-        ========================================== */
-
         * {
             box-sizing: border-box;
-
             margin: 0;
-
             padding: 0;
         }
 
+        :root {
+            --bg: #050505;
+            --panel: #0b0b0b;
+            --panel-2: #101010;
+            --border: #242424;
+            --text: #f5f5f5;
+            --muted: #858585;
+            --muted-2: #555;
+            --primary: #6366f1;
+            --secondary: #38bdf8;
+            --green: #22c55e;
+            --red: #ef4444;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
-
             min-height: 100vh;
-
             font-family: "Inter", sans-serif;
-
-            color: #f5f5f5;
-
+            color: var(--text);
             background:
-                radial-gradient(
-                    circle at 20% 10%,
-                    rgba(79, 70, 229, 0.18),
-                    transparent 30%
-                ),
-
-                radial-gradient(
-                    circle at 80% 90%,
-                    rgba(14, 165, 233, 0.12),
-                    transparent 30%
-                ),
-
-                #050505;
-
+                radial-gradient(circle at 15% 10%, rgba(79, 70, 229, 0.18), transparent 30%),
+                radial-gradient(circle at 85% 90%, rgba(14, 165, 233, 0.12), transparent 30%),
+                var(--bg);
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
             padding: 30px;
-
         }
 
+        button,
+        input,
+        select {
+            font: inherit;
+        }
 
-        /* ==========================================
-           APP CONTAINER
-        ========================================== */
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
 
         .app {
-
             width: 100%;
-
-            max-width: 900px;
-
+            max-width: 920px;
             min-height: 650px;
-
             position: relative;
-
             overflow: hidden;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(20, 20, 20, 0.96),
-                    rgba(8, 8, 8, 0.98)
-                );
-
-            border:
-                1px solid
-                rgba(255, 255, 255, 0.08);
-
+            background: linear-gradient(145deg, rgba(20, 20, 20, 0.97), rgba(8, 8, 8, 0.99));
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
-
-            box-shadow:
-                0 30px 80px
-                rgba(0, 0, 0, 0.65);
-
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65);
         }
-
-
-        /* ==========================================
-           TOP GLOW
-        ========================================== */
 
         .app::before {
-
             content: "";
-
             position: absolute;
-
-            width: 400px;
-
-            height: 400px;
-
-            top: -250px;
-
+            width: 450px;
+            height: 450px;
+            top: -290px;
             left: 50%;
-
             transform: translateX(-50%);
-
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(99, 102, 241, 0.25),
-                    transparent 70%
-                );
-
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25), transparent 70%);
             pointer-events: none;
-
         }
-
-
-        /* ==========================================
-           HEADER
-        ========================================== */
 
         header {
-
-            padding: 28px 35px;
-
-            border-bottom:
-                1px solid
-                rgba(255, 255, 255, 0.07);
-
+            position: relative;
+            z-index: 2;
+            padding: 25px 35px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
         }
-
 
         .logo {
-
-            font-family:
-                "Space Grotesk",
-                sans-serif;
-
+            font-family: "Space Grotesk", sans-serif;
             font-size: 22px;
-
             font-weight: 700;
-
             letter-spacing: -0.5px;
-
         }
-
 
         .logo span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #818cf8,
-                    #38bdf8
-                );
-
+            background: linear-gradient(90deg, #818cf8, #38bdf8);
             -webkit-background-clip: text;
-
             background-clip: text;
-
             color: transparent;
-
         }
-
 
         .status {
-
-            font-size: 12px;
-
+            font-size: 11px;
             color: #737373;
-
-            letter-spacing: 0.5px;
-
+            letter-spacing: 1px;
         }
 
-
-        /* ==========================================
-           SCREENS
-        ========================================== */
+        .screen {
+            position: relative;
+            z-index: 1;
+        }
 
         #welcomeScreen,
         #quizScreen,
         #resultsScreen {
-
             padding: 55px;
-
         }
-
-
-        /* ==========================================
-           WELCOME
-        ========================================== */
 
         .welcome-content {
-
-            max-width: 650px;
-
+            max-width: 670px;
             margin: auto;
-
             text-align: center;
-
         }
-
 
         .welcome-content h1 {
-
-            font-family:
-                "Space Grotesk",
-                sans-serif;
-
-            font-size: clamp(
-                42px,
-                7vw,
-                68px
-            );
-
+            font-family: "Space Grotesk", sans-serif;
+            font-size: clamp(42px, 7vw, 68px);
             line-height: 1;
-
             letter-spacing: -3px;
-
             margin-bottom: 20px;
-
         }
-
 
         .welcome-content h1 span {
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #818cf8,
-                    #38bdf8
-                );
-
+            background: linear-gradient(90deg, #818cf8, #38bdf8);
             -webkit-background-clip: text;
-
             background-clip: text;
-
             color: transparent;
-
         }
 
-
-        .welcome-content p {
-
+        .welcome-content > p {
             color: #888;
-
             line-height: 1.7;
-
-            margin-bottom: 45px;
-
+            margin-bottom: 40px;
         }
-
-
-        /* ==========================================
-           SETTINGS
-        ========================================== */
 
         .settings {
-
             display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 20px;
-
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
             text-align: left;
-
-            margin-bottom: 30px;
-
+            margin-bottom: 25px;
         }
-
 
         .field {
-
             display: flex;
-
             flex-direction: column;
-
-            gap: 9px;
-
+            gap: 8px;
         }
-
 
         .field.full {
-
-            grid-column:
-                1 / -1;
-
+            grid-column: 1 / -1;
         }
-
 
         .field label {
-
             color: #aaa;
-
             font-size: 13px;
-
             font-weight: 600;
-
-            letter-spacing: 0.2px;
-
         }
-
 
         .settings select,
         .settings input {
-
             width: 100%;
-
-            height: 52px;
-
-            padding:
-                0 16px;
-
-            border-radius: 12px;
-
-            border:
-                1px solid
-                #262626;
-
-            background:
-                #0d0d0d;
-
+            height: 50px;
+            padding: 0 15px;
+            border-radius: 11px;
+            border: 1px solid #262626;
+            background: #0d0d0d;
             color: #eee;
-
-            font-family:
-                "Inter",
-                sans-serif;
-
-            font-size: 14px;
-
             outline: none;
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
-
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
-
 
         .settings select:hover,
         .settings input:hover {
-
-            border-color:
-                #3a3a3a;
-
+            border-color: #3a3a3a;
         }
-
 
         .settings select:focus,
         .settings input:focus {
-
-            border-color:
-                #6366f1;
-
-            background:
-                #111;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(
-                    99,
-                    102,
-                    241,
-                    0.12
-                );
-
+            border-color: var(--primary);
+            background: #111;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
         }
-
 
         .settings input::placeholder {
-
             color: #555;
-
         }
-
 
         .settings option {
-
             background: #111;
-
             color: white;
-
         }
 
-
-        /* ==========================================
-           MAIN BUTTON
-        ========================================== */
-
-        #startButton {
-
+        .primary-button {
             width: 100%;
-
-            height: 54px;
-
+            height: 53px;
             border: none;
-
-            border-radius: 12px;
-
+            border-radius: 11px;
             cursor: pointer;
-
             color: white;
-
-            font-family:
-                "Inter",
-                sans-serif;
-
-            font-size: 14px;
-
             font-weight: 600;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #4f46e5,
-                    #2563eb
-                );
-
-            box-shadow:
-                0 10px 30px
-                rgba(
-                    37,
-                    99,
-                    235,
-                    0.18
-                );
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                filter 0.2s ease;
-
+            background: linear-gradient(90deg, #4f46e5, #2563eb);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.18);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
         }
 
-
-        #startButton:hover {
-
-            transform:
-                translateY(-2px);
-
-            filter:
-                brightness(1.1);
-
-            box-shadow:
-                0 15px 35px
-                rgba(
-                    37,
-                    99,
-                    235,
-                    0.3
-                );
-
+        .primary-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            box-shadow: 0 15px 35px rgba(37, 99, 235, 0.3);
         }
 
-
-        #startButton:active {
-
-            transform:
-                translateY(0);
-
+        .primary-button:disabled {
+            opacity: 0.65;
+            cursor: wait;
         }
 
+        .loading {
+            display: none;
+            margin-top: 16px;
+            color: #777;
+            font-size: 13px;
+        }
 
-        /* ==========================================
-           QUIZ
-        ========================================== */
+        .loading.active {
+            display: block;
+        }
+
+        .music-panel {
+            margin-top: 28px;
+            padding: 18px;
+            border: 1px solid #202020;
+            border-radius: 14px;
+            background: rgba(10, 10, 10, 0.8);
+            text-align: left;
+        }
+
+        .music-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 14px;
+        }
+
+        .music-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .music-subtitle {
+            color: #666;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-button {
+            width: 38px;
+            height: 34px;
+            border: 1px solid #292929;
+            border-radius: 9px;
+            background: #151515;
+            color: #ddd;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .music-button:hover {
+            background: #1d1d1d;
+            border-color: #444;
+        }
+
+        .track-select {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #242424;
+            border-radius: 9px;
+            background: #101010;
+            color: #ddd;
+            padding: 0 12px;
+            outline: none;
+        }
+
+        .volume-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 12px;
+            color: #777;
+            font-size: 11px;
+        }
+
+        .volume-row input {
+            flex: 1;
+            accent-color: var(--primary);
+        }
 
         #quizScreen {
-
             display: none;
-
         }
-
 
         .quiz-top {
-
             display: flex;
-
-            justify-content:
-                space-between;
-
+            justify-content: space-between;
             align-items: center;
-
-            margin-bottom: 25px;
-
+            margin-bottom: 20px;
         }
-
 
         #questionCounter {
-
             color: #777;
-
             font-size: 13px;
-
         }
 
+        .quiz-score {
+            color: #777;
+            font-size: 13px;
+        }
 
         .progress-container {
-
             width: 100%;
-
             height: 4px;
-
             background: #171717;
-
             border-radius: 20px;
-
             overflow: hidden;
-
-            margin-bottom: 45px;
-
+            margin-bottom: 42px;
         }
-
 
         #progressBar {
-
             width: 0%;
-
             height: 100%;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #6366f1,
-                    #38bdf8
-                );
-
-            transition:
-                width 0.4s ease;
-
+            background: linear-gradient(90deg, #6366f1, #38bdf8);
+            transition: width 0.4s ease;
         }
-
 
         #questionText {
-
-            font-family:
-                "Space Grotesk",
-                sans-serif;
-
+            font-family: "Space Grotesk", sans-serif;
             font-size: 28px;
-
             line-height: 1.35;
-
-            letter-spacing:
-                -0.5px;
-
-            margin-bottom: 30px;
-
+            letter-spacing: -0.5px;
+            margin-bottom: 28px;
         }
-
-
-        /* ==========================================
-           ANSWERS
-        ========================================== */
 
         #answers {
-
             display: grid;
-
             gap: 12px;
-
         }
-
 
         .answerButton {
-
             width: 100%;
-
-            padding: 18px 20px;
-
+            padding: 17px 20px;
             text-align: left;
-
-            border-radius: 12px;
-
-            border:
-                1px solid
-                #242424;
-
-            background:
-                #0d0d0d;
-
+            border-radius: 11px;
+            border: 1px solid #242424;
+            background: #0d0d0d;
             color: #ddd;
-
-            font-family:
-                "Inter",
-                sans-serif;
-
-            font-size: 14px;
-
             cursor: pointer;
-
-            transition:
-                0.2s ease;
-
+            transition: 0.2s ease;
         }
-
 
         .answerButton:hover:not(:disabled) {
-
-            border-color:
-                #4f46e5;
-
-            background:
-                #121212;
-
-            transform:
-                translateX(3px);
-
+            border-color: #4f46e5;
+            background: #121212;
+            transform: translateX(3px);
         }
-
 
         .answerButton.correct {
-
-            border-color:
-                #22c55e;
-
-            background:
-                rgba(
-                    34,
-                    197,
-                    94,
-                    0.08
-                );
-
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.08);
             color: #86efac;
-
         }
-
 
         .answerButton.wrong {
-
-            border-color:
-                #ef4444;
-
-            background:
-                rgba(
-                    239,
-                    68,
-                    68,
-                    0.08
-                );
-
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.08);
             color: #fca5a5;
-
         }
-
 
         .answerButton:disabled {
-
             cursor: default;
-
         }
-
-
-        /* ==========================================
-           FEEDBACK
-        ========================================== */
 
         #feedback {
-
             min-height: 25px;
-
-            margin-top: 20px;
-
+            margin-top: 18px;
             font-size: 14px;
-
             color: #aaa;
-
         }
 
-
-        /* ==========================================
-           NEXT BUTTON
-        ========================================== */
+        #nextButton,
+        #restartButton {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #292929;
+            border-radius: 11px;
+            background: #151515;
+            color: #ddd;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
 
         #nextButton {
-
-            margin-top: 25px;
-
-            width: 100%;
-
-            height: 50px;
-
-            border: 1px solid #292929;
-
-            border-radius: 11px;
-
-            background: #151515;
-
-            color: #ddd;
-
-            cursor: pointer;
-
-            font-weight: 600;
-
-            transition:
-                0.2s ease;
-
+            margin-top: 20px;
         }
 
-
-        #nextButton:hover:not(:disabled) {
-
+        #nextButton:hover:not(:disabled),
+        #restartButton:hover {
             background: #1c1c1c;
-
             border-color: #444;
-
         }
-
 
         #nextButton:disabled {
-
             opacity: 0.35;
-
             cursor: not-allowed;
-
         }
-
-
-        /* ==========================================
-           RESULTS
-        ========================================== */
 
         #resultsScreen {
-
             display: none;
-
             text-align: center;
-
         }
-
 
         #resultsScreen h2 {
-
-            font-family:
-                "Space Grotesk",
-                sans-serif;
-
+            font-family: "Space Grotesk", sans-serif;
             font-size: 36px;
-
-            margin-bottom: 35px;
-
+            margin-bottom: 30px;
         }
-
 
         #finalScore {
-
             font-size: 64px;
-
-            font-family:
-                "Space Grotesk",
-                sans-serif;
-
+            font-family: "Space Grotesk", sans-serif;
             font-weight: 700;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    #818cf8,
-                    #38bdf8
-                );
-
+            background: linear-gradient(90deg, #818cf8, #38bdf8);
             -webkit-background-clip: text;
-
             background-clip: text;
-
             color: transparent;
-
         }
-
 
         #percentage {
-
             color: #777;
-
-            margin-bottom: 40px;
-
+            margin-bottom: 35px;
         }
-
 
         #topicResults {
-
-            padding: 20px;
-
-            border:
-                1px solid
-                #222;
-
+            padding: 18px;
+            border: 1px solid #222;
             border-radius: 14px;
-
             background: #0b0b0b;
-
-            margin-bottom: 25px;
-
+            margin-bottom: 22px;
         }
-
 
         #topicResults p {
-
             padding: 10px;
-
             color: #aaa;
-
-            border-bottom:
-                1px solid
-                #181818;
-
+            border-bottom: 1px solid #181818;
         }
-
 
         #topicResults p:last-child {
-
             border-bottom: none;
-
         }
 
+        .weak-label {
+            color: #777;
+            margin-bottom: 8px;
+        }
 
         #weakTopic {
-
             color: #818cf8;
-
             font-weight: 600;
-
         }
-
 
         #recommendation {
-
             color: #888;
-
             line-height: 1.7;
-
-            margin-bottom: 30px;
-
+            margin-bottom: 28px;
         }
 
-
-        #restartButton {
-
-            width: 100%;
-
-            height: 50px;
-
-            border-radius: 11px;
-
-            border:
-                1px solid
-                #292929;
-
-            background:
-                #121212;
-
-            color: #ddd;
-
-            cursor: pointer;
-
-            font-weight: 600;
-
-            transition:
-                0.2s ease;
-
+        .results-music {
+            margin-bottom: 22px;
         }
-
-
-        #restartButton:hover {
-
-            background:
-                #1b1b1b;
-
-            border-color:
-                #444;
-
-        }
-
-
-        /* ==========================================
-           RESPONSIVE
-        ========================================== */
 
         @media (max-width: 650px) {
-
             body {
-
                 padding: 10px;
-
             }
-
 
             .app {
-
                 border-radius: 16px;
-
             }
-
 
             header {
-
-                padding:
-                    22px;
-
+                padding: 21px;
             }
 
+            .status {
+                display: none;
+            }
 
             #welcomeScreen,
             #quizScreen,
             #resultsScreen {
-
-                padding:
-                    30px 22px;
-
+                padding: 30px 21px;
             }
-
 
             .settings {
-
-                grid-template-columns:
-                    1fr;
-
+                grid-template-columns: 1fr;
             }
-
 
             .field.full {
-
-                grid-column:
-                    auto;
-
+                grid-column: auto;
             }
-
 
             #questionText {
-
                 font-size: 23px;
-
             }
 
+            .music-header {
+                align-items: flex-start;
+            }
         }
-
     </style>
-
 </head>
-
 
 <body>
 
+<div class="app">
 
-    <div class="app">
+    <header>
+        <div class="logo">
+            Study<span>Sense</span>
+        </div>
 
+        <div class="status">
+            PERSONALIZED LEARNING
+        </div>
+    </header>
 
-        <!-- ======================================
-             HEADER
-        ======================================= -->
+    <section id="welcomeScreen" class="screen">
 
-        <header>
+        <div class="welcome-content">
 
-            <div class="logo">
-
-                Study<span>Sense</span>
-
-            </div>
-
-
-            <div class="status">
-
-                PERSONALIZED LEARNING
-
-            </div>
-
-        </header>
-
-
-
-        <!-- ======================================
-             WELCOME SCREEN
-        ======================================= -->
-
-        <section id="welcomeScreen">
-
-            <div class="welcome-content">
-
-                <h1>
-
-                    Learn
-
-                    <span>smarter.</span>
-
-                </h1>
-
-
-                <p>
-
-                    Create a personalized quiz,
-                    test your understanding,
-                    and identify the areas
-                    that need more practice.
-
-                </p>
-
-
-                <div class="settings">
-
-
-                    <!-- SUBJECT -->
-
-                    <div class="field">
-
-                        <label for="subjectSelect">
-
-                            Subject
-
-                        </label>
-
-
-                        <select
-                            id="subjectSelect"
-                        >
-
-                            <option value="Biology">
-
-                                Biology
-
-                            </option>
-
-
-                            <option value="Chemistry">
-
-                                Chemistry
-
-                            </option>
-
-
-                            <option value="Physics">
-
-                                Physics
-
-                            </option>
-
-
-                            <option value="Mathematics">
-
-                                Mathematics
-
-                            </option>
-
-
-                            <option value="General Science">
-
-                                General Science
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-
-                    <!-- DIFFICULTY -->
-
-                    <div class="field">
-
-                        <label for="difficultySelect">
-
-                            Difficulty
-
-                        </label>
-
-
-                        <select
-                            id="difficultySelect"
-                        >
-
-                            <option value="Easy">
-
-                                Easy
-
-                            </option>
-
-
-                            <option
-                                value="Medium"
-                                selected
-                            >
-
-                                Medium
-
-                            </option>
-
-
-                            <option value="Hard">
-
-                                Hard
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-
-                    <!-- TOPIC -->
-
-                    <div class="field full">
-
-                        <label for="topicInput">
-
-                            Topic
-
-                        </label>
-
-
-                        <input
-                            type="text"
-                            id="topicInput"
-                            placeholder="e.g. Newton's Laws"
-                        >
-
-                    </div>
-
-
-
-                    <!-- QUESTION COUNT -->
-
-                    <div class="field full">
-
-                        <label for="questionCount">
-
-                            Number of Questions
-
-                        </label>
-
-
-                        <select
-                            id="questionCount"
-                        >
-
-                            <option value="5">
-
-                                5
-
-                            </option>
-
-
-                            <option value="10">
-
-                                10
-
-                            </option>
-
-
-                            <option value="15">
-
-                                15
-
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-                </div>
-
-
-                <button id="startButton">
-
-                    Generate Quiz
-
-                </button>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ======================================
-             QUIZ SCREEN
-        ======================================= -->
-
-        <section id="quizScreen">
-
-
-            <div class="quiz-top">
-
-                <span id="questionCounter">
-
-                    Question 1 of 5
-
-                </span>
-
-            </div>
-
-
-            <div class="progress-container">
-
-                <div id="progressBar"></div>
-
-            </div>
-
-
-            <h2 id="questionText">
-
-                Question goes here
-
-            </h2>
-
-
-            <div id="answers"></div>
-
-
-            <div id="feedback"></div>
-
-
-            <button
-                id="nextButton"
-                disabled
-            >
-
-                Next Question
-
-            </button>
-
-
-        </section>
-
-
-
-        <!-- ======================================
-             RESULTS SCREEN
-        ======================================= -->
-
-        <section id="resultsScreen">
-
-
-            <h2>
-
-                Quiz Complete
-
-            </h2>
-
-
-            <div id="finalScore">
-
-                0 / 5
-
-            </div>
-
-
-            <div id="percentage">
-
-                0%
-
-            </div>
-
-
-            <div id="topicResults"></div>
-
+            <h1>
+                Learn <span>smarter.</span>
+            </h1>
 
             <p>
-
-                Weakest topic:
-
-                <span id="weakTopic">
-
-                    -
-
-                </span>
-
+                Create an AI-powered personalized quiz,
+                test your understanding, and discover
+                the topics that need more practice.
             </p>
 
+            <div class="settings">
 
-            <br>
+                <div class="field">
+                    <label for="subjectSelect">Subject</label>
 
+                    <select id="subjectSelect">
+                        <option value="Biology">Biology</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="English">English</option>
+                        <option value="General Science">General Science</option>
+                    </select>
+                </div>
 
-            <p id="recommendation">
+                <div class="field">
+                    <label for="difficultySelect">Difficulty</label>
 
-                Your recommendation
-                will appear here.
+                    <select id="difficultySelect">
+                        <option value="Easy">Easy</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
 
-            </p>
+                <div class="field full">
+                    <label for="topicInput">Topic</label>
 
+                    <input
+                        type="text"
+                        id="topicInput"
+                        placeholder="e.g. Newton's Laws"
+                        maxlength="100"
+                    >
+                </div>
 
-            <button id="restartButton">
+                <div class="field full">
+                    <label for="questionCount">Number of Questions</label>
 
-                Create Another Quiz
+                    <select id="questionCount">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </div>
 
+            </div>
+
+            <button id="startButton" class="primary-button">
+                Generate Quiz
             </button>
 
+            <div id="loading" class="loading">
+                Generating your personalized quiz...
+            </div>
 
-        </section>
+            <div class="music-panel">
 
+                <div class="music-header">
+                    <div>
+                        <div class="music-title">Study Music</div>
+                        <div class="music-subtitle">
+                            Play relaxing music while you study
+                        </div>
+                    </div>
 
-    </div>
+                    <div class="music-controls">
+                        <button
+                            id="previousTrack"
+                            class="music-button"
+                            type="button"
+                            aria-label="Previous track"
+                        >
+                            ‹
+                        </button>
 
+                        <button
+                            id="musicToggle"
+                            class="music-button"
+                            type="button"
+                            aria-label="Play music"
+                        >
+                            ▶
+                        </button>
 
-    <script src="script.js"></script>
+                        <button
+                            id="nextTrack"
+                            class="music-button"
+                            type="button"
+                            aria-label="Next track"
+                        >
+                            ›
+                        </button>
+                    </div>
+                </div>
+
+                <select id="trackSelect" class="track-select">
+                    <option value="0">Lofi Study — Focus</option>
+                    <option value="1">Lofi Study — Night</option>
+                    <option value="2">Lofi Study — Rain</option>
+                </select>
+
+                <div class="volume-row">
+                    <span>Volume</span>
+
+                    <input
+                        id="volumeControl"
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value="0.35"
+                    >
+                </div>
+
+                <audio id="studyAudio" preload="none"></audio>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="quizScreen" class="screen">
+
+        <div class="quiz-top">
+
+            <span id="questionCounter">
+                Question 1 of 5
+            </span>
+
+            <span id="quizScore" class="quiz-score">
+                Score: 0
+            </span>
+
+        </div>
+
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
+
+        <h2 id="questionText">
+            Question goes here
+        </h2>
+
+        <div id="answers"></div>
+
+        <div id="feedback"></div>
+
+        <button id="nextButton" disabled>
+            Next Question
+        </button>
+
+    </section>
+
+    <section id="resultsScreen" class="screen">
+
+        <h2>Quiz Complete</h2>
+
+        <div id="finalScore">
+            0 / 5
+        </div>
+
+        <div id="percentage">
+            0%
+        </div>
+
+        <div id="topicResults"></div>
+
+        <div class="weak-label">
+            Weakest topic:
+            <span id="weakTopic">-</span>
+        </div>
+
+        <p id="recommendation">
+            Your recommendation will appear here.
+        </p>
+
+        <div class="music-panel results-music">
+
+            <div class="music-header">
+                <div>
+                    <div class="music-title">Keep studying with music</div>
+                    <div class="music-subtitle">
+                        Your study session can continue after the quiz.
+                    </div>
+                </div>
+            </div>
+
+            <select id="resultsTrackSelect" class="track-select">
+                <option value="0">Lofi Study — Focus</option>
+                <option value="1">Lofi Study — Night</option>
+                <option value="2">Lofi Study — Rain</option>
+            </select>
+
+        </div>
+
+        <button id="restartButton">
+            Create Another Quiz
+        </button>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
-
 </html>

@@ -2,209 +2,368 @@
 // STUDYSENSE - SCRIPT
 // ==========================================
 
-
-// ==========================================
-// 1. VARIABLES
-// ==========================================
-
 let questions = [];
-
 let currentQuestion = 0;
-
 let score = 0;
-
 let answerSelected = false;
-
 let topicPerformance = {};
 
-
 // ==========================================
-// 2. GET HTML ELEMENTS
-// ==========================================
-
-const welcomeScreen =
-    document.getElementById("welcomeScreen");
-
-const quizScreen =
-    document.getElementById("quizScreen");
-
-const resultsScreen =
-    document.getElementById("resultsScreen");
-
-const startButton =
-    document.getElementById("startButton");
-
-const questionText =
-    document.getElementById("questionText");
-
-const answersContainer =
-    document.getElementById("answers");
-
-const nextButton =
-    document.getElementById("nextButton");
-
-const finalScore =
-    document.getElementById("finalScore");
-
-const percentage =
-    document.getElementById("percentage");
-
-const topicResults =
-    document.getElementById("topicResults");
-
-const weakTopic =
-    document.getElementById("weakTopic");
-
-const recommendation =
-    document.getElementById("recommendation");
-
-const restartButton =
-    document.getElementById("restartButton");
-
-const questionCounter =
-    document.getElementById("questionCounter");
-
-const progressBar =
-    document.getElementById("progressBar");
-
-const feedback =
-    document.getElementById("feedback");
-
-
-// ==========================================
-// 3. SETTINGS
+// HTML ELEMENTS
 // ==========================================
 
-// These IDs need to match the HTML.
+const welcomeScreen = document.getElementById("welcomeScreen");
+const quizScreen = document.getElementById("quizScreen");
+const resultsScreen = document.getElementById("resultsScreen");
 
-const subjectSelect =
-    document.getElementById("subject");
+const startButton = document.getElementById("startButton");
+const restartButton = document.getElementById("restartButton");
 
-const topicInput =
-    document.getElementById("topic");
+const subjectSelect = document.getElementById("subjectSelect");
+const topicInput = document.getElementById("topicInput");
+const difficultySelect = document.getElementById("difficultySelect");
+const questionCountSelect = document.getElementById("questionCount");
 
-const difficultySelect =
-    document.getElementById("difficulty");
+const questionText = document.getElementById("questionText");
+const answersContainer = document.getElementById("answers");
+const nextButton = document.getElementById("nextButton");
 
-const questionCountSelect =
-    document.getElementById("questionCount");
+const questionCounter = document.getElementById("questionCounter");
+const quizScore = document.getElementById("quizScore");
+const progressBar = document.getElementById("progressBar");
+const feedback = document.getElementById("feedback");
 
+const finalScore = document.getElementById("finalScore");
+const percentage = document.getElementById("percentage");
+const topicResults = document.getElementById("topicResults");
+const weakTopic = document.getElementById("weakTopic");
+const recommendation = document.getElementById("recommendation");
+
+const loading = document.getElementById("loading");
 
 // ==========================================
-// 4. GET QUIZ FROM GEMINI
+// MUSIC
+// ==========================================
+
+const studyAudio = document.getElementById("studyAudio");
+const musicToggle = document.getElementById("musicToggle");
+const previousTrack = document.getElementById("previousTrack");
+const nextTrack = document.getElementById("nextTrack");
+const trackSelect = document.getElementById("trackSelect");
+const resultsTrackSelect = document.getElementById("resultsTrackSelect");
+const volumeControl = document.getElementById("volumeControl");
+
+// ==========================================
+// LOCAL MUSIC
+// ==========================================
+//
+// We will put the MP3 files inside:
+//
+// music/
+//   lofi-focus.mp3
+//   lofi-night.mp3
+//   lofi-rain.mp3
+//
+// This avoids the Pixabay 403 problem.
+//
+
+const tracks = [
+    {
+        name: "Lofi Study — Focus",
+        url: "/music/lofi-focus.mp3"
+    },
+    {
+        name: "Lofi Study — Night",
+        url: "/music/lofi-night.mp3"
+    },
+    {
+        name: "Lofi Study — Rain",
+        url: "/music/lofi-rain.mp3"
+    }
+];
+
+let currentTrack = 0;
+
+studyAudio.volume = Number(volumeControl.value);
+
+// ==========================================
+// LOAD TRACK
+// ==========================================
+
+function loadTrack(index, autoplay = false) {
+
+    currentTrack =
+        (index + tracks.length) % tracks.length;
+
+    const track = tracks[currentTrack];
+
+    studyAudio.src = track.url;
+    studyAudio.load();
+
+    trackSelect.value = String(currentTrack);
+
+    if (resultsTrackSelect) {
+        resultsTrackSelect.value = String(currentTrack);
+    }
+
+    if (autoplay) {
+
+        studyAudio.play()
+            .then(function () {
+
+                musicToggle.textContent = "❚❚";
+
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "Music playback failed:",
+                    error
+                );
+
+                musicToggle.textContent = "▶";
+
+            });
+
+    }
+}
+
+// ==========================================
+// TOGGLE MUSIC
+// ==========================================
+
+function toggleMusic() {
+
+    if (!studyAudio.src) {
+        loadTrack(currentTrack);
+    }
+
+    if (studyAudio.paused) {
+
+        studyAudio.play()
+            .then(function () {
+
+                musicToggle.textContent = "❚❚";
+
+            })
+            .catch(function (error) {
+
+                console.error(
+                    "Music playback failed:",
+                    error
+                );
+
+                musicToggle.textContent = "▶";
+
+            });
+
+    } else {
+
+        studyAudio.pause();
+
+        musicToggle.textContent = "▶";
+    }
+}
+
+// ==========================================
+// CHANGE TRACK
+// ==========================================
+
+function changeTrack(direction) {
+
+    loadTrack(
+        currentTrack + direction,
+        true
+    );
+}
+
+// ==========================================
+// MUSIC EVENTS
+// ==========================================
+
+musicToggle.addEventListener(
+    "click",
+    toggleMusic
+);
+
+previousTrack.addEventListener(
+    "click",
+    function () {
+        changeTrack(-1);
+    }
+);
+
+nextTrack.addEventListener(
+    "click",
+    function () {
+        changeTrack(1);
+    }
+);
+
+trackSelect.addEventListener(
+    "change",
+    function () {
+
+        loadTrack(
+            Number(trackSelect.value),
+            !studyAudio.paused
+        );
+
+    }
+);
+
+resultsTrackSelect.addEventListener(
+    "change",
+    function () {
+
+        loadTrack(
+            Number(resultsTrackSelect.value),
+            !studyAudio.paused
+        );
+
+    }
+);
+
+volumeControl.addEventListener(
+    "input",
+    function () {
+
+        studyAudio.volume =
+            Number(volumeControl.value);
+
+    }
+);
+
+studyAudio.addEventListener(
+    "ended",
+    function () {
+
+        changeTrack(1);
+
+    }
+);
+
+studyAudio.addEventListener(
+    "error",
+    function () {
+
+        console.error(
+            "Unable to load music:",
+            studyAudio.src
+        );
+
+    }
+);
+
+// ==========================================
+// GET QUIZ FROM SERVER
 // ==========================================
 
 async function getAIQuiz() {
 
-    console.log("Requesting quiz from StudySense server...");
-
-    // --------------------------------------
-    // Get settings
-    // --------------------------------------
-
     const subject =
-        subjectSelect
-            ? subjectSelect.value
-            : "Biology";
-
+        subjectSelect.value;
 
     const topic =
-        topicInput && topicInput.value.trim()
-            ? topicInput.value.trim()
-            : "General " + subject;
-
+        topicInput.value.trim() ||
+        "General " + subject;
 
     const difficulty =
-        difficultySelect
-            ? difficultySelect.value
-            : "Medium";
-
+        difficultySelect.value;
 
     const count =
-        questionCountSelect
-            ? questionCountSelect.value
-            : "5";
-
-
-    // --------------------------------------
-    // Build API URL
-    // --------------------------------------
+        questionCountSelect.value;
 
     const params =
         new URLSearchParams({
-
             subject: subject,
-
             topic: topic,
-
             difficulty: difficulty,
-
             count: count
-
         });
 
-
-    // IMPORTANT:
-    // We use a relative URL.
-    //
-    // This works both locally and on Render.
-    //
-    // DO NOT use:
-    // http://localhost:3000/generate-quiz
-    //
+    /*
+     * IMPORTANT:
+     *
+     * Using a relative URL means:
+     *
+     * http://localhost:3000
+     *
+     * becomes:
+     *
+     * http://localhost:3000/generate-quiz
+     *
+     * This prevents the old problem where Live Server
+     * tried to request the API from port 5500.
+     */
 
     const url =
         "/generate-quiz?" +
         params.toString();
 
-
     console.log(
-        "Request URL:",
+        "Requesting quiz:",
         url
     );
 
-
     try {
 
-        // ----------------------------------
-        // Send request to backend
-        // ----------------------------------
-
         const response =
-            await fetch(url);
+            await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
 
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
 
-        // ----------------------------------
-        // Check response
-        // ----------------------------------
+        console.log(
+            "Quiz response:",
+            response.status,
+            contentType
+        );
+
+        let data;
+
+        if (
+            contentType.includes(
+                "application/json"
+            )
+        ) {
+
+            data =
+                await response.json();
+
+        } else {
+
+            const text =
+                await response.text();
+
+            console.error(
+                "Server returned non-JSON:",
+                text
+            );
+
+            throw new Error(
+                "The server returned an invalid response. " +
+                "Make sure StudySense is opened through " +
+                "http://localhost:3000"
+            );
+        }
 
         if (!response.ok) {
 
             throw new Error(
-                "Server returned HTTP " +
+                data.error ||
+                "Server error: HTTP " +
                 response.status
             );
 
         }
-
-
-        // ----------------------------------
-        // Convert response to JSON
-        // ----------------------------------
-
-        const data =
-            await response.json();
-
-
-        console.log(
-            "Quiz received:",
-            data
-        );
-
-
-        // ----------------------------------
-        // Check if server returned an error
-        // ----------------------------------
 
         if (data.error) {
 
@@ -214,11 +373,6 @@ async function getAIQuiz() {
 
         }
 
-
-        // ----------------------------------
-        // Make sure we received an array
-        // ----------------------------------
-
         if (!Array.isArray(data)) {
 
             throw new Error(
@@ -226,7 +380,6 @@ async function getAIQuiz() {
             );
 
         }
-
 
         if (data.length === 0) {
 
@@ -236,40 +389,99 @@ async function getAIQuiz() {
 
         }
 
-
-        // ----------------------------------
-        // Save questions
-        // ----------------------------------
+        validateQuiz(data);
 
         questions = data;
 
-
         return true;
-
 
     } catch (error) {
 
         console.error(
-            "Quiz request failed:",
+            "Quiz generation failed:",
             error
         );
 
-
         alert(
-            "Sorry, StudySense couldn't generate the quiz.\n\n" +
+            "StudySense couldn't generate the quiz.\n\n" +
             error.message
         );
 
-
         return false;
-
     }
-
 }
 
+// ==========================================
+// VALIDATE QUIZ
+// ==========================================
+
+function validateQuiz(data) {
+
+    data.forEach(
+        function (question, index) {
+
+            if (
+                !question ||
+                typeof question.question !== "string" ||
+                !Array.isArray(question.answers) ||
+                question.answers.length !== 4 ||
+                typeof question.correct !== "number"
+            ) {
+
+                throw new Error(
+                    "Question " +
+                    (index + 1) +
+                    " has an invalid format."
+                );
+
+            }
+
+            if (
+                question.correct < 0 ||
+                question.correct > 3 ||
+                !Number.isInteger(
+                    question.correct
+                )
+            ) {
+
+                throw new Error(
+                    "Question " +
+                    (index + 1) +
+                    " has an invalid correct answer."
+                );
+
+            }
+
+            if (
+                question.answers.some(
+                    answer =>
+                        typeof answer !== "string" ||
+                        !answer.trim()
+                )
+            ) {
+
+                throw new Error(
+                    "Question " +
+                    (index + 1) +
+                    " contains an invalid answer."
+                );
+
+            }
+
+            if (
+                typeof question.topic !== "string" ||
+                question.topic.trim() === ""
+            ) {
+
+                question.topic =
+                    "General";
+            }
+        }
+    );
+}
 
 // ==========================================
-// 5. SHOW QUESTION
+// SHOW QUESTION
 // ==========================================
 
 function showQuestion() {
@@ -280,14 +492,8 @@ function showQuestion() {
 
     feedback.textContent = "";
 
-
     const question =
         questions[currentQuestion];
-
-
-    // --------------------------------------
-    // Question counter
-    // --------------------------------------
 
     questionCounter.textContent =
         "Question " +
@@ -295,39 +501,22 @@ function showQuestion() {
         " of " +
         questions.length;
 
-
-    // --------------------------------------
-    // Progress bar
-    // --------------------------------------
+    quizScore.textContent =
+        "Score: " +
+        score;
 
     const progress =
         ((currentQuestion + 1) /
             questions.length) *
         100;
 
-
     progressBar.style.width =
         progress + "%";
-
-
-    // --------------------------------------
-    // Question text
-    // --------------------------------------
 
     questionText.textContent =
         question.question;
 
-
-    // --------------------------------------
-    // Remove old answers
-    // --------------------------------------
-
     answersContainer.innerHTML = "";
-
-
-    // --------------------------------------
-    // Create answer buttons
-    // --------------------------------------
 
     question.answers.forEach(
         function (answer, index) {
@@ -335,15 +524,14 @@ function showQuestion() {
             const button =
                 document.createElement("button");
 
+            button.type = "button";
 
             button.textContent =
                 answer;
 
-
             button.classList.add(
                 "answerButton"
             );
-
 
             button.addEventListener(
                 "click",
@@ -357,19 +545,16 @@ function showQuestion() {
                 }
             );
 
-
             answersContainer.appendChild(
                 button
             );
 
         }
     );
-
 }
 
-
 // ==========================================
-// 6. CHECK ANSWER
+// CHECK ANSWER
 // ==========================================
 
 function checkAnswer(
@@ -377,57 +562,35 @@ function checkAnswer(
     clickedButton
 ) {
 
-    if (answerSelected === true) {
-
+    if (answerSelected) {
         return;
-
     }
-
 
     answerSelected = true;
 
     nextButton.disabled = false;
 
-
     const question =
         questions[currentQuestion];
 
-
-    // --------------------------------------
-    // Create topic data
-    // --------------------------------------
-
     if (!topicPerformance[question.topic]) {
 
-        topicPerformance[question.topic] = {
-
+        topicPerformance[
+            question.topic
+        ] = {
             correct: 0,
-
             total: 0
-
         };
-
     }
-
 
     topicPerformance[
         question.topic
     ].total++;
 
-
-    // --------------------------------------
-    // Get all answer buttons
-    // --------------------------------------
-
     const allButtons =
         document.querySelectorAll(
             ".answerButton"
         );
-
-
-    // --------------------------------------
-    // Disable all buttons
-    // --------------------------------------
 
     allButtons.forEach(
         function (button) {
@@ -436,11 +599,6 @@ function checkAnswer(
 
         }
     );
-
-
-    // --------------------------------------
-    // Check answer
-    // --------------------------------------
 
     if (
         selectedAnswer ===
@@ -453,15 +611,16 @@ function checkAnswer(
             question.topic
         ].correct++;
 
-
         clickedButton.classList.add(
             "correct"
         );
 
-
         feedback.textContent =
-            "Correct";
+            "Correct ✓";
 
+        quizScore.textContent =
+            "Score: " +
+            score;
 
     } else {
 
@@ -469,34 +628,23 @@ function checkAnswer(
             "wrong"
         );
 
-
         feedback.textContent =
             "Incorrect";
 
+        const correctButton =
+            allButtons[question.correct];
 
-        // Show correct answer
+        if (correctButton) {
 
-        if (
-            allButtons[
-                question.correct
-            ]
-        ) {
-
-            allButtons[
-                question.correct
-            ].classList.add(
+            correctButton.classList.add(
                 "correct"
             );
-
         }
-
     }
-
 }
 
-
 // ==========================================
-// 7. SHOW RESULTS
+// SHOW RESULTS
 // ==========================================
 
 function showResults() {
@@ -504,14 +652,8 @@ function showResults() {
     quizScreen.style.display =
         "none";
 
-
     resultsScreen.style.display =
         "block";
-
-
-    // --------------------------------------
-    // Calculate percentage
-    // --------------------------------------
 
     const scorePercentage =
         Math.round(
@@ -519,33 +661,19 @@ function showResults() {
             100
         );
 
-
     finalScore.textContent =
         score +
         " / " +
         questions.length;
 
-
     percentage.textContent =
         scorePercentage +
         "%";
 
-
-    // --------------------------------------
-    // Clear previous topic results
-    // --------------------------------------
-
     topicResults.innerHTML = "";
 
-
     let weakestTopic = "";
-
     let weakestPercentage = 101;
-
-
-    // --------------------------------------
-    // Analyze topics
-    // --------------------------------------
 
     for (
         const topic in topicPerformance
@@ -556,12 +684,10 @@ function showResults() {
                 topic
             ].correct;
 
-
         const total =
             topicPerformance[
                 topic
             ].total;
-
 
         const topicPercentage =
             Math.round(
@@ -569,14 +695,8 @@ function showResults() {
                 100
             );
 
-
-        // ----------------------------------
-        // Create topic result
-        // ----------------------------------
-
         const topicElement =
             document.createElement("p");
-
 
         topicElement.textContent =
             topic +
@@ -584,15 +704,9 @@ function showResults() {
             topicPercentage +
             "%";
 
-
         topicResults.appendChild(
             topicElement
         );
-
-
-        // ----------------------------------
-        // Find weakest topic
-        // ----------------------------------
 
         if (
             topicPercentage <
@@ -602,191 +716,117 @@ function showResults() {
             weakestPercentage =
                 topicPercentage;
 
-
             weakestTopic =
                 topic;
-
         }
-
     }
-
-
-    // --------------------------------------
-    // Display weakest topic
-    // --------------------------------------
 
     weakTopic.textContent =
         weakestTopic ||
         "Not available";
 
-
-    // --------------------------------------
-    // Recommendation
-    // --------------------------------------
-
     if (weakestTopic) {
 
-        recommendation.textContent =
-            "Spend more time practicing " +
-            weakestTopic +
-            ". Focus on understanding the concepts and solving practice questions.";
+        if (scorePercentage >= 80) {
+
+            recommendation.textContent =
+                "Great work! You have a strong understanding overall. Keep practicing " +
+                weakestTopic +
+                " to make your knowledge even stronger.";
+
+        } else if (scorePercentage >= 50) {
+
+            recommendation.textContent =
+                "You're making progress. Spend more time practicing " +
+                weakestTopic +
+                " and review the core concepts before attempting another quiz.";
+
+        } else {
+
+            recommendation.textContent =
+                "Start by reviewing the fundamentals of " +
+                weakestTopic +
+                ". Then try practice questions and take another quiz.";
+        }
 
     } else {
 
         recommendation.textContent =
             "Keep practicing to improve your performance.";
-
     }
-
 }
 
-
 // ==========================================
-// 8. START QUIZ
+// START QUIZ
 // ==========================================
 
 startButton.addEventListener(
     "click",
     async function () {
 
-        // ----------------------------------
-        // Prevent multiple clicks
-        // ----------------------------------
-
         startButton.disabled = true;
-
-
-        // ----------------------------------
-        // Change button text
-        // ----------------------------------
 
         const originalText =
             startButton.textContent;
 
-
         startButton.textContent =
             "Preparing quiz...";
 
+        loading.classList.add(
+            "active"
+        );
 
         try {
-
-            // --------------------------------
-            // Hide welcome loading if available
-            // --------------------------------
-
-            const loading =
-                document.getElementById(
-                    "loading"
-                );
-
-
-            if (loading) {
-
-                loading.style.display =
-                    "block";
-
-            }
-
-
-            // --------------------------------
-            // Ask Gemini for quiz
-            // --------------------------------
 
             const success =
                 await getAIQuiz();
 
-
-            // --------------------------------
-            // Stop if request failed
-            // --------------------------------
-
             if (!success) {
-
                 return;
-
             }
 
-
-            // --------------------------------
-            // Reset quiz
-            // --------------------------------
-
             currentQuestion = 0;
-
             score = 0;
-
             answerSelected = false;
-
             topicPerformance = {};
-
-
-            // --------------------------------
-            // Show quiz screen
-            // --------------------------------
 
             welcomeScreen.style.display =
                 "none";
 
-
             quizScreen.style.display =
                 "block";
-
 
             resultsScreen.style.display =
                 "none";
 
-
-            // --------------------------------
-            // Display first question
-            // --------------------------------
-
             showQuestion();
-
 
         } finally {
 
-            // --------------------------------
-            // Hide loading
-            // --------------------------------
-
-            const loading =
-                document.getElementById(
-                    "loading"
-                );
-
-
-            if (loading) {
-
-                loading.style.display =
-                    "none";
-
-            }
-
-
-            // --------------------------------
-            // Restore button
-            // --------------------------------
+            loading.classList.remove(
+                "active"
+            );
 
             startButton.disabled =
                 false;
 
-
             startButton.textContent =
                 originalText;
-
         }
-
     }
 );
 
-
 // ==========================================
-// 9. NEXT BUTTON
+// NEXT QUESTION
 // ==========================================
 
 nextButton.addEventListener(
     "click",
     function () {
+
+        if (!answerSelected) {
+            return;
+        }
 
         if (
             currentQuestion <
@@ -800,15 +840,12 @@ nextButton.addEventListener(
         } else {
 
             showResults();
-
         }
-
     }
 );
 
-
 // ==========================================
-// 10. RESTART
+// RESTART
 // ==========================================
 
 restartButton.addEventListener(
@@ -825,22 +862,25 @@ restartButton.addEventListener(
 
         topicPerformance = {};
 
-
         resultsScreen.style.display =
             "none";
-
 
         welcomeScreen.style.display =
             "block";
 
-
-        // Reset progress bar
-
         progressBar.style.width =
             "0%";
 
+        feedback.textContent =
+            "";
 
-        feedback.textContent = "";
-
+        quizScore.textContent =
+            "Score: 0";
     }
 );
+
+// ==========================================
+// INITIALIZE MUSIC
+// ==========================================
+
+loadTrack(0, false);

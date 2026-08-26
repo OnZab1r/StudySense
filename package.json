@@ -1,12 +1,18 @@
 {
   "name": "study-sense",
   "version": "1.0.0",
-  "description": "",
-  "main": "script.js",
+  "description": "StudySense - AI-powered personalized quiz generator",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
+  "keywords": [
+    "education",
+    "quiz",
+    "ai",
+    "gemini",
+    "studysense"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

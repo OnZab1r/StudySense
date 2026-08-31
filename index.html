@@ -1,838 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="theme-color"
-        content="#050505"
-    >
-
-    <title>
-        StudySense — Learn Smarter
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#06070b">
+    <title>StudySense — Learn Smarter</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
-
-    <!-- =====================================================
-         AMBIENT BACKGROUND
-    ====================================================== -->
-
-    <div class="ambient">
-
+    <div class="ambient" aria-hidden="true">
         <div class="orb orb-one"></div>
         <div class="orb orb-two"></div>
         <div class="orb orb-three"></div>
-
     </div>
 
-
-    <!-- =====================================================
-         APP
-    ====================================================== -->
-
-    <main class="app">
-
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
-        <header class="header">
-
-            <div class="logo">
-                Study<span>Sense</span>
+    <div class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark">✦</div>
+                <div>
+                    <div class="brand-name">StudySense</div>
+                    <div class="brand-subtitle">AI-powered personalized learning</div>
+                </div>
             </div>
-
 
             <div class="header-actions">
-
-                <div class="status">
-                    AI PERSONALIZED LEARNING
+                <div class="status">AI PERSONALIZED LEARNING</div>
+                <div id="userArea" class="user-area" hidden>
+                    <span id="userGreeting" class="user-greeting"></span>
+                    <button id="logoutButton" class="logout-button" type="button">Log out</button>
                 </div>
-
-
-                <button
-                    id="themeToggle"
-                    class="icon-button"
-                    type="button"
-                    aria-label="Toggle theme"
-                    title="Toggle theme"
-                >
-                    ☀️
-                </button>
-
+                <button id="themeToggle" class="icon-button" type="button" aria-label="Switch to light mode" title="Switch to light mode">☀️</button>
             </div>
-
         </header>
 
+        <main>
+            <!-- AUTHENTICATION -->
+            <section id="authScreen" class="screen auth-screen">
+                <div class="auth-card">
+                    <div class="auth-brand-mark">✦</div>
+                    <div class="eyebrow">WELCOME TO STUDYSENSE</div>
+                    <h1 id="authTitle">Sign in to StudySense</h1>
+                    <p id="authSubtitle">Your quizzes, scores, and progress will be saved to your account.</p>
 
-        <!-- =================================================
-             WELCOME SCREEN
-        ================================================== -->
-
-        <section
-            id="welcomeScreen"
-            class="screen welcome-screen"
-        >
-
-            <div class="welcome-content">
-
-                <div class="hero-badge">
-                    <span class="badge-dot"></span>
-                    AI-POWERED LEARNING
-                </div>
-
-
-                <h1 class="hero-title">
-
-                    Learn
-
-                    <span class="gradient-text">
-                        smarter.
-                    </span>
-
-                </h1>
-
-
-                <p class="hero-description">
-
-                    Generate personalized quizzes,
-                    test your knowledge, and discover
-                    exactly what you need to practice.
-
-                </p>
-
-
-                <!-- =========================================
-                     QUIZ CONFIGURATION
-                ========================================== -->
-
-                <div class="settings-card">
-
-                    <div class="settings-grid">
-
-                        <div class="field">
-
-                            <label for="subjectSelect">
-                                Subject
-                            </label>
-
-                            <div class="select-wrapper">
-
-                                <select
-                                    id="subjectSelect"
-                                >
-
-                                    <option value="Biology">
-                                        Biology
-                                    </option>
-
-                                    <option value="Chemistry">
-                                        Chemistry
-                                    </option>
-
-                                    <option value="Physics">
-                                        Physics
-                                    </option>
-
-                                    <option value="Mathematics">
-                                        Mathematics
-                                    </option>
-
-                                    <option value="English">
-                                        English
-                                    </option>
-
-                                    <option value="General Science">
-                                        General Science
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label for="difficultySelect">
-                                Difficulty
-                            </label>
-
-                            <div class="select-wrapper">
-
-                                <select
-                                    id="difficultySelect"
-                                >
-
-                                    <option value="Easy">
-                                        Easy
-                                    </option>
-
-                                    <option
-                                        value="Medium"
-                                        selected
-                                    >
-                                        Medium
-                                    </option>
-
-                                    <option value="Hard">
-                                        Hard
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label for="topicInput">
-                                Topic
-                            </label>
-
-                            <input
-                                id="topicInput"
-                                type="text"
-                                placeholder="e.g. Newton's Laws"
-                                maxlength="100"
-                                autocomplete="off"
-                            >
-
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label for="questionCount">
-                                Number of Questions
-                            </label>
-
-                            <div class="question-options">
-
-                                <button
-                                    type="button"
-                                    class="count-option active"
-                                    data-count="5"
-                                >
-                                    5
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="count-option"
-                                    data-count="10"
-                                >
-                                    10
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="count-option"
-                                    data-count="15"
-                                >
-                                    15
-                                </button>
-
-                            </div>
-
-
-                            <select
-                                id="questionCount"
-                                class="hidden-control"
-                                aria-hidden="true"
-                            >
-
-                                <option value="5">
-                                    5
-                                </option>
-
-                                <option value="10">
-                                    10
-                                </option>
-
-                                <option value="15">
-                                    15
-                                </option>
-
-                            </select>
-
-                        </div>
-
+                    <div class="auth-tabs" role="tablist">
+                        <button id="loginTab" class="auth-tab active" type="button" role="tab">Log in</button>
+                        <button id="registerTab" class="auth-tab" type="button" role="tab">Create account</button>
                     </div>
 
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input id="loginEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Your password">
+                        </div>
+                        <button class="primary-button auth-submit" type="submit"><span>Log in</span><span>→</span></button>
+                    </form>
 
-                    <button
-                        id="startButton"
-                        class="generate-button"
-                        type="button"
-                    >
+                    <form id="registerForm" class="auth-form" hidden>
+                        <div class="form-group">
+                            <label for="registerName">Name</label>
+                            <input id="registerName" type="text" autocomplete="name" maxlength="40" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input id="registerEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input id="registerPassword" type="password" autocomplete="new-password" minlength="6" required placeholder="At least 6 characters">
+                        </div>
+                        <button class="primary-button auth-submit" type="submit"><span>Create account</span><span>→</span></button>
+                    </form>
 
-                        <span class="button-text">
-                            Generate Quiz
-                        </span>
+                    <div id="authMessage" class="auth-message" role="alert"></div>
+                    <div class="auth-note">🔒 Your password is securely hashed before it is stored.</div>
+                </div>
+            </section>
 
-                        <span class="button-icon">
-                            →
-                        </span>
+            <!-- HOME / WELCOME -->
+            <section id="welcomeScreen" class="screen welcome-screen" hidden>
+                <div class="hero">
+                    <div class="hero-badge"><span>●</span> AI-POWERED LEARNING</div>
+                    <h1>Learn <span>smarter.</span></h1>
+                    <p>Generate personalized quizzes, test your knowledge, and discover exactly what you need to practice.</p>
+                </div>
 
+                <div class="setup-card">
+                    <div class="card-header">
+                        <div>
+                            <div class="eyebrow">QUIZ SETUP</div>
+                            <h2>Build your practice session</h2>
+                        </div>
+                        <div class="card-icon">✦</div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="subjectSelect">Subject</label>
+                            <select id="subjectSelect">
+                                <option value="Biology">Biology</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="English">English</option>
+                                <option value="General Science">General Science</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="difficultySelect">Difficulty</label>
+                            <select id="difficultySelect">
+                                <option value="Easy">Easy</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="topicInput">Topic</label>
+                            <input id="topicInput" type="text" maxlength="100" autocomplete="off" placeholder="e.g. Newton's Laws">
+                            <span class="field-hint">Leave blank to let StudySense choose a general topic.</span>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="questionCount">Number of Questions</label>
+                            <div class="count-selector">
+                                <button type="button" class="count-option active" data-count="5">5</button>
+                                <button type="button" class="count-option" data-count="10">10</button>
+                                <button type="button" class="count-option" data-count="15">15</button>
+                            </div>
+
+                            <select id="questionCount" class="hidden-control" aria-hidden="true" tabindex="-1">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                            </select>
+                            <span id="questionCountLabel" class="field-hint">5 questions</span>
+                        </div>
+                    </div>
+
+                    <button id="startButton" class="primary-button start-button" type="button">
+                        <span class="button-text">Generate Quiz</span>
+                        <span class="button-arrow">→</span>
                     </button>
 
-
-                    <div
-                        id="loading"
-                        class="loading"
-                    >
-
-                        <span class="loading-spinner"></span>
-
-                        <span>
-                            Creating your personalized quiz...
-                        </span>
-
+                    <div id="loading" class="loading-state">
+                        <span class="spinner"></span>
+                        <div>
+                            <strong>Creating your personalized quiz...</strong>
+                            <span>Please wait a moment.</span>
+                        </div>
                     </div>
 
+                    <div id="errorMessage" class="error-message" role="alert">
+                        <span class="error-icon">!</span>
+                        <span id="errorText">Please try again.</span>
+                    </div>
                 </div>
 
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✦</div>
+                        <div><h3>AI Generated</h3><p>Fresh questions created for your selected subject.</p></div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">◈</div>
+                        <div><h3>Personalized</h3><p>Difficulty and topic are tailored to your session.</p></div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">∞</div>
+                        <div><h3>Practice</h3><p>Review weak areas and keep improving.</p></div>
+                    </div>
+                </div>
+            </section>
 
-                <div class="hero-features">
+            <!-- QUIZ -->
+            <section id="quizScreen" class="screen quiz-screen" hidden>
+                <div class="quiz-header">
+                    <div class="quiz-heading">
+                        <div class="eyebrow">PERSONALIZED QUIZ</div>
+                        <span id="questionCounter" class="question-counter">Question 1 of 5</span>
+                    </div>
+                    <div class="score-box">
+                        <span>SCORE</span>
+                        <strong id="quizScore">0</strong>
+                    </div>
+                </div>
 
-                    <div>
-                        <span>✦</span>
-                        AI Generated
+                <div class="progress-wrapper">
+                    <div class="progress-meta">
+                        <span>Your progress</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-topic" id="questionTopic">General</div>
+                    <div class="question-label">QUESTION</div>
+                    <h2 id="questionText" class="question-text">Question goes here</h2>
+                    <div id="answers" class="answers"></div>
+                </div>
+
+                <div id="feedback" class="feedback" aria-live="polite"></div>
+
+                <button id="nextButton" class="primary-button next-button" type="button" disabled>
+                    <span>Next Question</span><span>→</span>
+                </button>
+            </section>
+
+            <!-- RESULTS -->
+            <section id="resultsScreen" class="screen results-screen" hidden>
+                <div class="results-hero">
+                    <div class="hero-badge"><span>✦</span> QUIZ COMPLETE</div>
+                    <h1>Nice work.</h1>
+                    <p>Here's how you performed.</p>
+                </div>
+
+                <div class="results-summary">
+                    <div class="result-main-card">
+                        <div class="result-label">FINAL SCORE</div>
+                        <div id="finalScore" class="final-score">0 / 5</div>
+                        <div id="percentage" class="result-percentage">0%</div>
                     </div>
 
-                    <div>
-                        <span>◈</span>
-                        Personalized
+                    <div class="stat-card">
+                        <span>CORRECT</span>
+                        <strong id="correctCount">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>WRONG</span>
+                        <strong id="wrongCount">0</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>ACCURACY</span>
+                        <strong id="accuracyCount">0%</strong>
+                    </div>
+                </div>
+
+                <div class="results-grid">
+                    <div class="results-card">
+                        <div class="results-card-header">
+                            <div class="eyebrow">PERFORMANCE</div>
+                            <h2>Topic breakdown</h2>
+                        </div>
+                        <div id="topicResults" class="topic-results"></div>
                     </div>
 
-                    <div>
-                        <span>∞</span>
-                        Practice
+                    <div class="results-card recommendation-card">
+                        <div class="recommendation-icon">✦</div>
+                        <div class="eyebrow">FOCUS NEXT</div>
+                        <h2 id="weakTopic">Not available</h2>
+                        <p id="recommendation">Your recommendation will appear here.</p>
                     </div>
-
                 </div>
 
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             QUIZ SCREEN
-        ================================================== -->
-
-        <section
-            id="quizScreen"
-            class="screen quiz-screen"
-        >
-
-            <div class="quiz-header">
-
-                <div>
-
-                    <div class="eyebrow">
-                        PERSONALIZED QUIZ
-                    </div>
-
-                    <span id="questionCounter">
-                        Question 1 of 5
-                    </span>
-
-                </div>
-
-
-                <div class="score-pill">
-
-                    <span>
-                        SCORE
-                    </span>
-
-                    <strong id="quizScore">
-                        0
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div class="progress-wrapper">
-
-                <div class="progress-meta">
-
-                    <span>
-                        Your progress
-                    </span>
-
-                    <span id="progressPercent">
-                        0%
-                    </span>
-
-                </div>
-
-
-                <div class="progress-container">
-
-                    <div
-                        id="progressBar"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="question-card">
-
-                <div class="question-number">
-                    QUESTION
-                </div>
-
-                <h2 id="questionText">
-                    Question goes here
-                </h2>
-
-                <div id="answers"></div>
-
-            </div>
-
-
-            <div
-                id="feedback"
-                class="feedback"
-            ></div>
-
-
-            <button
-                id="nextButton"
-                class="next-button"
-                type="button"
-                disabled
-            >
-
-                <span>
-                    Next Question
-                </span>
-
-                <span>
-                    →
-                </span>
-
-            </button>
-
-        </section>
-
-
-        <!-- =================================================
-             RESULTS SCREEN
-        ================================================== -->
-
-        <section
-            id="resultsScreen"
-            class="screen results-screen"
-        >
-
-            <div class="results-badge">
-                <span>✦</span>
-                QUIZ COMPLETE
-            </div>
-
-
-            <h2 class="results-title">
-                Nice work.
-            </h2>
-
-
-            <p class="results-subtitle">
-                Here's how you performed.
-            </p>
-
-
-            <div class="score-display">
-
-                <div
-                    id="finalScore"
-                    class="final-score"
-                >
-                    0 / 5
-                </div>
-
-                <div
-                    id="percentage"
-                    class="percentage"
-                >
-                    0%
-                </div>
-
-            </div>
-
-
-            <div
-                id="topicResults"
-                class="topic-results"
-            ></div>
-
-
-            <div class="weak-topic-card">
-
-                <div class="weak-topic-label">
-                    FOCUS NEXT
-                </div>
-
-                <div
-                    id="weakTopic"
-                    class="weak-topic"
-                >
-                    -
-                </div>
-
-            </div>
-
-
-            <p
-                id="recommendation"
-                class="recommendation"
-            >
-                Your recommendation will appear here.
-            </p>
-
-
-            <button
-                id="restartButton"
-                class="restart-button"
-                type="button"
-            >
-
-                Create Another Quiz
-
-                <span>
-                    ↻
-                </span>
-
-            </button>
-
-        </section>
-
-    </main>
-
-
-    <!-- =====================================================
-         FLOATING MUSIC BUTTON
-    ====================================================== -->
-
-    <button
-        id="musicFloatingButton"
-        class="music-floating-button"
-        type="button"
-        aria-label="Open study music"
-        title="Study Music"
-    >
-
-        <span class="music-note">
-            ♪
-        </span>
-
-        <span
-            id="musicPlayingIndicator"
-            class="music-playing-indicator"
-        ></span>
-
+                <button id="restartButton" class="primary-button restart-button" type="button">
+                    <span>Create Another Quiz</span><span>↻</span>
+                </button>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>StudySense</span><span>•</span><span>Learn smarter, one question at a time.</span>
+        </footer>
+    </div>
+
+    <!-- MUSIC -->
+    <button id="musicFloatingButton" class="music-floating-button" type="button" aria-label="Open study music" title="Study Music">
+        <span class="music-icon">♪</span>
+        <span id="musicPlayingIndicator" class="music-playing-indicator"></span>
     </button>
 
+    <div id="musicOverlay" class="music-overlay" aria-hidden="true"></div>
 
-    <!-- =====================================================
-         MUSIC OVERLAY
-    ====================================================== -->
-
-    <div
-        id="musicOverlay"
-        class="music-overlay"
-    ></div>
-
-
-    <!-- =====================================================
-         MUSIC DRAWER
-    ====================================================== -->
-
-    <aside
-        id="musicDrawer"
-        class="music-drawer"
-        aria-hidden="true"
-    >
-
-        <div class="music-drawer-header">
-
+    <aside id="musicDrawer" class="music-drawer" aria-hidden="true">
+        <div class="drawer-header">
             <div>
-
-                <div class="drawer-title">
-                    Study Music
-                </div>
-
-                <div class="drawer-subtitle">
-                    Stay focused while you learn
-                </div>
-
+                <div class="eyebrow">STUDY MODE</div>
+                <h2>Study Music</h2>
+                <p>Stay focused while you learn.</p>
             </div>
-
-
-            <button
-                id="musicClose"
-                class="music-close"
-                type="button"
-                aria-label="Close music"
-            >
-                ×
-            </button>
-
+            <button id="musicClose" class="drawer-close" type="button" aria-label="Close music">×</button>
         </div>
-
 
         <div class="now-playing">
-
-            <div class="album-art">
-                ♪
+            <div class="album-art">♪</div>
+            <div class="track-info">
+                <span>NOW PLAYING</span>
+                <strong id="currentTrackName">Lofi Midnight Club</strong>
             </div>
-
-
-            <div class="track-details">
-
-                <span>
-                    NOW PLAYING
-                </span>
-
-                <strong id="currentTrackName">
-                    Lofi Midnight Club
-                </strong>
-
-            </div>
-
         </div>
-
 
         <div class="music-controls">
-
-            <button
-                id="previousTrack"
-                class="music-control"
-                type="button"
-                aria-label="Previous track"
-            >
-                ⏮
-            </button>
-
-
-            <button
-                id="musicToggle"
-                class="music-control play-control"
-                type="button"
-                aria-label="Play or pause"
-            >
-                ▶
-            </button>
-
-
-            <button
-                id="nextTrack"
-                class="music-control"
-                type="button"
-                aria-label="Next track"
-            >
-                ⏭
-            </button>
-
+            <button id="previousTrack" class="music-control secondary-control" type="button" aria-label="Previous track">⏮</button>
+            <button id="musicToggle" class="music-control play-control" type="button" aria-label="Play or pause">▶</button>
+            <button id="nextTrack" class="music-control secondary-control" type="button" aria-label="Next track">⏭</button>
         </div>
-
 
         <div class="music-section">
-
-            <label for="trackSelect">
-                Choose a song
-            </label>
-
-            <select
-                id="trackSelect"
-                class="track-select"
-            >
-
-                <option value="0">
-                    Lofi Midnight Club
-                </option>
-
-                <option value="1">
-                    Around the World
-                </option>
-
-                <option value="2">
-                    Diet Mountain Dew
-                </option>
-
-                <option value="3">
-                    Feet Don't Fail Me Now
-                </option>
-
-                <option value="4">
-                    I Like the Way You Kiss Me
-                </option>
-
-                <option value="5">
-                    Misery
-                </option>
-
-                <option value="6">
-                    Nuts
-                </option>
-
-                <option value="7">
-                    Obsessed
-                </option>
-
-                <option value="8">
-                    Five Hundred Miles
-                </option>
-
-                <option value="9">
-                    Salvatore
-                </option>
-
-                <option value="10">
-                    Suzume no Tojimaru
-                </option>
-
+            <label for="trackSelect">Choose a song</label>
+            <select id="trackSelect">
+                <option value="0">Lofi Midnight Club</option>
+                <option value="1">Around the World</option>
+                <option value="2">Diet Mountain Dew</option>
+                <option value="3">Feet Don't Fail Me Now</option>
+                <option value="4">I Like the Way You Kiss Me</option>
+                <option value="5">Misery</option>
+                <option value="6">Nuts</option>
+                <option value="7">Obsessed</option>
+                <option value="8">Five Hundred Miles</option>
+                <option value="9">Salvatore</option>
+                <option value="10">Suzume no Tojimaru</option>
             </select>
-
         </div>
-
 
         <div class="volume-section">
-
-            <div class="volume-header">
-
-                <span>
-                    Volume
-                </span>
-
-                <span id="volumeValue">
-                    35%
-                </span>
-
-            </div>
-
-
-            <input
-                id="volumeControl"
-                class="volume-control"
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value="0.35"
-            >
-
+            <div class="volume-header"><span>Volume</span><span id="volumeValue">35%</span></div>
+            <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.35">
         </div>
 
+        <audio id="studyAudio" preload="none"></audio>
 
-        <audio
-            id="studyAudio"
-            preload="none"
-        ></audio>
-
-
-        <select
-            id="resultsTrackSelect"
-            class="hidden-control"
-            aria-hidden="true"
-            tabindex="-1"
-        >
-
-            <option value="0">
-                Lofi Midnight Club
-            </option>
-
-            <option value="1">
-                Around the World
-            </option>
-
-            <option value="2">
-                Diet Mountain Dew
-            </option>
-
-            <option value="3">
-                Feet Don't Fail Me Now
-            </option>
-
-            <option value="4">
-                I Like the Way You Kiss Me
-            </option>
-
-            <option value="5">
-                Misery
-            </option>
-
-            <option value="6">
-                Nuts
-            </option>
-
-            <option value="7">
-                Obsessed
-            </option>
-
-            <option value="8">
-                Five Hundred Miles
-            </option>
-
-            <option value="9">
-                Salvatore
-            </option>
-
-            <option value="10">
-                Suzume no Tojimaru
-            </option>
-
+        <select id="resultsTrackSelect" class="hidden-control" aria-hidden="true" tabindex="-1">
+            <option value="0">Lofi Midnight Club</option>
+            <option value="1">Around the World</option>
+            <option value="2">Diet Mountain Dew</option>
+            <option value="3">Feet Don't Fail Me Now</option>
+            <option value="4">I Like the Way You Kiss Me</option>
+            <option value="5">Misery</option>
+            <option value="6">Nuts</option>
+            <option value="7">Obsessed</option>
+            <option value="8">Five Hundred Miles</option>
+            <option value="9">Salvatore</option>
+            <option value="10">Suzume no Tojimaru</option>
         </select>
-
     </aside>
 
-
-    <!-- =====================================================
-         SCRIPT
-    ====================================================== -->
-
     <script src="script.js"></script>
-
 </body>
-
 </html>
